@@ -1,5 +1,5 @@
 from entities.user import User
-
+import re
 
 class UserInputError(Exception):
     pass
@@ -34,7 +34,22 @@ class UserService:
         return user
 
     def validate(self, username, password):
+
+        username_min_length = 3
+        password_min_length = 8
+
         if not username or not password:
             raise UserInputError("Username and password are required")
 
-        # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
+        if len(username) < username_min_length:
+            raise UserInputError("Invalid username: username too short")
+      
+        if not re.match("^[a-z]+$", username):
+            raise UserInputError("Invalid username: use chars between [a-z]")
+      
+        if len(password) < password_min_length:
+            raise UserInputError("Invalid password: password too short")
+
+        if password.isalpha():
+            raise UserInputError("Invalid password: only alpha chars used")
+     
